@@ -1,0 +1,26 @@
+From 9ccd2040d72165e3a5cfdeaa1d4cf503b974223b Mon Sep 17 00:00:00 2001
+From: Zhu Yi <dev.yi.zhu@gmail.com>
+Date: Fri, 26 Apr 2019 13:13:35 +0800
+Subject: [PATCH] src/png.c: replace png_memcpy with memcpy
+
+Signed-off-by: Zhu Yi <dev.yi.zhu@gmail.com>
+---
+ src/png.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/png.c b/src/png.c
+index bb4574c..293661e 100644
+--- a/src/png.c
++++ b/src/png.c
+@@ -40,7 +40,7 @@ image_png_read_buf(png_structp png_ptr, png_bytep data, png_size_t len)
+     }
+  }
+ 
+- png_memcpy(data, buffer_ptr(im->buf), len);
++ memcpy(data, buffer_ptr(im->buf), len);
+  buffer_consume(im->buf, len);
+  
+  goto ok;
+-- 
+2.17.1
+

@@ -1,0 +1,15 @@
+[Unit]
+Description=Logitech Media Server
+Wants=multi-user.target network-online.target
+After=multi-user.target network-online.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/lib/slimserver/slimserver.pl --prefsdir /usr/lib/slimserver/prefs --logdir /usr/lib/slimserver/log --cachedir /usr/lib/slimserver/cache --user lms --group lms
+User=lms
+Group=lms
+
+[Install]
+WantedBy=multi-user.target network-online.target

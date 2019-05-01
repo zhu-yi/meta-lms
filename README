@@ -1,0 +1,44 @@
+meta-lms
+========
+This layer provides recipes for Logitech Media Server (slimserver) and its
+perl module dependencies, in addition, a player (squeezelite) for it.
+
+Dependencies
+============
+
+This layer depends on below layer(s):
+
+  URI: git://git.openembedded.org/meta-openembedded
+  branch: master
+
+And it also depends on below features or components on the target:
+  systemd
+  alsa (or other audio packages)
+
+Patches
+=======
+
+Please submit any patches against the meta-lms layer to the maintainer:
+
+Maintainer: Zhu Yi <dev.yi.zhu@gmail.com>
+
+Table of Contents
+=================
+
+  I. Adding the meta-lms layer to your build
+ II. Usage
+
+
+I. Adding the meta-lms layer to your build
+=================================================
+
+Run 'bitbake-layers add-layer meta-lms'
+
+II. Usage
+========
+
+1) in local.conf or image recipe:
+...
+IMAGE_INSTALL += "slimserver squeezelite"
+
+2) bitbake the image and boot the target, the server and player will auto run.

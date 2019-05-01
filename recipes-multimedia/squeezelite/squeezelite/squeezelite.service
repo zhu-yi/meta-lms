@@ -1,0 +1,13 @@
+[Unit]
+Description=Squeezelite Player
+Wants=multi-user.target network-online.target
+After=multi-user.target network-online.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/bin/squeezelite -n %H
+
+[Install]
+WantedBy=multi-user.target network-online.target
