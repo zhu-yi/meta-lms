@@ -1,7 +1,7 @@
 [Unit]
-Description=Logitech Media Server
-Wants=multi-user.target network-online.target
-After=multi-user.target network-online.target
+Description=Logitech Media Server Daemon
+Wants=network-online.target
+After=network-online.target
 
 [Service]
 Type=simple
@@ -12,4 +12,4 @@ User=lms
 Group=lms
 
 [Install]
-WantedBy=multi-user.target network-online.target
+WantedBy=multi-user.target

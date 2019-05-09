@@ -9,8 +9,8 @@ LIC_FILES_CHKSUM = "file://server/License.txt;md5=1c5138338dfe20ec44c8ac5a37d8dd
 
 DEPENDS = "rsync-native"
 
-SRCREV_server = "${AUTOREV}"
-SRCREV_platforms = "${AUTOREV}"
+SRCREV_server = "5d11bc2a64a7a1948ed91a4019c72eb4540cf7cd"
+SRCREV_platforms = "510e7c41fe1de236f501b4b349b2e3e2708b31a3"
 SRCBRANCH = "public/7.9"
 
 SRC_URI ="git://github.com/Logitech/${PN}.git;protocol=git;branch=${SRCBRANCH};name=server;destsuffix=git/server \
