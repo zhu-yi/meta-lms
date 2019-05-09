@@ -19,9 +19,10 @@ DEPENDS = " \
     wiringpi\
 "
 
+SRCREV = "09672cfea0b45a0fee635ed62ee788e6ece3c858"
+
 SRC_URI = "git://github.com/ralph-irving/${PN}.git;protocol=git;branch=master \
            file://${PN}.service"
-SRCREV = "71c012ad9ba102feb95823b7b9dc17e5305689c7"
 
 S = "${WORKDIR}/git"
 

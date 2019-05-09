@@ -1,7 +1,7 @@
 [Unit]
-Description=Squeezelite Player
-Wants=multi-user.target network-online.target
-After=multi-user.target network-online.target
+Description=Squeezelite Player Daemon
+Wants=network.target sound.target
+After=network.target sound.target
 
 [Service]
 Type=simple
@@ -10,4 +10,4 @@ RestartSec=5s
 ExecStart=/usr/bin/squeezelite -n %H
 
 [Install]
-WantedBy=multi-user.target network-online.target
+WantedBy=multi-user.target
