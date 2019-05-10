@@ -1,0 +1,91 @@
+From ce66e6f13edfdca1fca3d5391521cdacc8ec38f0 Mon Sep 17 00:00:00 2001
+From: Zhu Yi <dev.yi.zhu@gmail.com>
+Date: Tue, 7 May 2019 14:51:26 +0000
+Subject: [PATCH] fix jivelite cross compile issue
+
+Signed-off-by: Zhu Yi <dev.yi.zhu@gmail.com>
+---
+ lib-src/Makefile                   | 2 +-
+ lib-src/luaexpat-1.2.0/config      | 2 +-
+ lib-src/luafilesystem-1.6.2/config | 2 +-
+ lib-src/luamd5/Makefile            | 2 +-
+ src/Makefile                       | 4 ++--
+ src/visualizer/Makefile            | 2 +-
+ 6 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/lib-src/Makefile b/lib-src/Makefile
+index f02b375..7cfbe19 100644
+--- a/lib-src/Makefile
++++ b/lib-src/Makefile
+@@ -38,7 +38,7 @@ luazipfilter: ../lib/lua/5.1/zipfilter.so
+ 	cp luamd5/sha1.so ../lib/lua/5.1/sha1.so
+ 
+ ../lib/lua/5.1/socket.so:
+-	cd luasocket-2.0.2; make LD="gcc" PLATFORM=${TARGET}
++	cd luasocket-2.0.2; make LDFLAGS=${LD_FLAGS} PLATFORM=${TARGET}
+ 	mkdir -p ../lib/lua/5.1
+ 	cp luasocket-2.0.2/src/socket.so.2.0.2 ../lib/lua/5.1/socket.so
+ 	cp luasocket-2.0.2/src/mime.so.1.0.2 ../lib/lua/5.1/mime.so
+diff --git a/lib-src/luaexpat-1.2.0/config b/lib-src/luaexpat-1.2.0/config
+index 93bf185..6eed102 100644
+--- a/lib-src/luaexpat-1.2.0/config
++++ b/lib-src/luaexpat-1.2.0/config
+@@ -30,4 +30,4 @@ CWARNS = -Wall -pedantic \
+         -Wwrite-strings
+ 
+ CFLAGS = $(CWARNS) -ansi -O2 -I$(LUA_INC) -fPIC
+-CC = gcc
++#CC = gcc
+diff --git a/lib-src/luafilesystem-1.6.2/config b/lib-src/luafilesystem-1.6.2/config
+index 5457041..7335723 100644
+--- a/lib-src/luafilesystem-1.6.2/config
++++ b/lib-src/luafilesystem-1.6.2/config
+@@ -19,6 +19,6 @@ LIBNAME= $T.so.$V
+ WARN= -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic
+ INCS= -I$(LUA_INC)
+ CFLAGS= $(WARN) $(INCS)
+-CC= gcc
++#CC= gcc
+ 
+ # $Id: config,v 1.21 2007/10/27 22:42:32 carregal Exp $
+diff --git a/lib-src/luamd5/Makefile b/lib-src/luamd5/Makefile
+index aebb5e5..a984dcd 100644
+--- a/lib-src/luamd5/Makefile
++++ b/lib-src/luamd5/Makefile
+@@ -73,7 +73,7 @@ endif
+ MD5OBJ= $(MD5LIB)
+ 
+ # probably no need to change anything below here
+-CC= gcc
++#CC= gcc
+ CFLAGS= $(INCS) $(DEFS) $(WARN) -O2 $G -fPIC
+ WARN= #-ansi -pedantic -Wall
+ INCS= -I$(LUAINC) $(MD5INC)
+diff --git a/src/Makefile b/src/Makefile
+index 49a5dc6..a3f2a0f 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -1,8 +1,8 @@
+ LDFLAGS ?= -lrt
+ SOURCES ?= platform_linux.c
+ 
+-CFLAGS  += -I. -I$(PREFIX)/include/luajit-2.0 -I/usr/include/SDL -Wall -fPIC
+-LDFLAGS += -lSDL -lSDL_ttf -lSDL_image -lSDL_gfx -lluajit-5.1 -lm -lpthread
++CFLAGS  += -I. -I$(PREFIX)/include/luajit-2.0 -I${PREFIX}/include/SDL -Wall -fPIC
++LDFLAGS += -lSDL -lSDL_ttf -lSDL_image -lSDL_gfx -lluajit-5.1 -lm -lpthread -lrt
+ EXE = ../bin/jivelite
+ 
+ DEPS    = jive.h common.h log.h version.h
+diff --git a/src/visualizer/Makefile b/src/visualizer/Makefile
+index 4df900e..6903076 100644
+--- a/src/visualizer/Makefile
++++ b/src/visualizer/Makefile
+@@ -1,4 +1,4 @@
+-CFLAGS  += -I. -I/usr/local/include/luajit-2.0 -I/usr/include/SDL -Wall -fPIC
++CFLAGS  += -I. -I${PREFIX}/include/luajit-2.0 -I${PREFIX}/include/SDL -Wall -fPIC
+ LDFLAGS += -lluajit-5.1 -lm -lrt
+ 
+ DEPS    = ../jive.h ../common.h ../log.h
+-- 
+2.17.1
+

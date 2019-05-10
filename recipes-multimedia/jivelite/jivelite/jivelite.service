@@ -1,0 +1,14 @@
+[Unit]
+Description=Jivelite control for squeezelite player
+Wants=squeezelite.service
+After=squeezelite.service
+
+[Service]
+Type=simple
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/jivelite
+User=jive
+Group=jive
+
+[Install]
+WantedBy=graphical.target
