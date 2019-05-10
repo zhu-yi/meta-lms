@@ -26,7 +26,11 @@ SRC_URI = "git://github.com/ralph-irving/${PN}.git;protocol=git;branch=master \
 
 S = "${WORKDIR}/git"
 
-inherit systemd
+inherit useradd systemd
+
+USERADD_PACKAGES = "${PN}"
+USERADD_PARAM_${PN} = "--system --home-dir /var/run/${PN} --user-group squeeze"
+GROUPMEMS_PARAM_${PN} = "--group audio --add squeeze"
 
 EXTRA_OEMAKE = 'OPTS="-DRESAMPLE -DFFMPEG -DVISEXPORT -DDSD -DGPIO -DRPI"'
 
@@ -36,6 +40,8 @@ do_install() {
 
     install -d ${D}${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/${PN}.service ${D}${systemd_system_unitdir}/${PN}.service
+
+    chown squeeze:squeeze ${D}${bindir}/${PN}
 }
 
 FILES_${PN} = " \

@@ -8,6 +8,8 @@ Type=simple
 Restart=on-failure
 RestartSec=5s
 ExecStart=/usr/bin/squeezelite -n %H
+User=squeeze
+Group=squeeze
 
 [Install]
 WantedBy=multi-user.target
