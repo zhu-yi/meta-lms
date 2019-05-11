@@ -1,44 +1,90 @@
 meta-lms
 ========
-This layer provides recipes for Logitech Media Server (slimserver) and its
-perl module dependencies, in addition, a player (squeezelite) for it.
+
+This layer provides recipes for slimserver and its perl module dependencies,
+as well as recipes for squeezelite and jivelite. The recipes had been tested
+on Raspberry Pi 3 B+ with the official 7" touch display.
 
 Dependencies
 ============
 
-This layer depends on below layer(s):
+This layer depends on below repositories:
+
+  URI: git://git.yoctoproject.org/poky
+  branch: thud
+
+  URI: git://git.yoctoproject.org/meta-raspberrypi
+  branch: thud
 
   URI: git://git.openembedded.org/meta-openembedded
-  branch: master
+  branch: thud
 
-And it also depends on below features or components on the target:
-  systemd
-  alsa (or other audio packages)
+The BBLAYERS in bblayers.conf on my build machine looks like below:
 
-Patches
-=======
+BBLAYERS ?= " \
+  ${BSPDIR}/poky/meta \
+  ${BSPDIR}/poky/meta-poky \
+  ${BSPDIR}/meta-openembedded/meta-oe \
+  ${BSPDIR}/meta-openembedded/meta-multimedia \
+  ${BSPDIR}/meta-openembedded/meta-perl \
+  ${BSPDIR}/meta-raspberrypi \
+  ${BSPDIR}/meta-lms \
+  ${BSPDIR}/meta-rpi-home \
+"
 
-Please submit any patches against the meta-lms layer to the maintainer:
+How to build
+============
 
-Maintainer: Zhu Yi <dev.yi.zhu@gmail.com>
+Following DISTRO_FEATURES and IMAGE_FEATURES may need to add to your build
+depends on what specified in IMAGE_INSTALL:
 
-Table of Contents
-=================
+- DISTRO_FEATURES
+  systemd  (for slimserver, squeezelite, jivelite)
+  alsa     (for squeezelite)
+  x11      (for jivelite)
 
-  I. Adding the meta-lms layer to your build
- II. Usage
+- IMAGE_FEATURES
+  x11-base (for jivelite)
 
+For enabling audio support on raspberry pi, we need to add below to conf file:
 
-I. Adding the meta-lms layer to your build
-=================================================
+RPI_EXTRA_CONFIG = ' \n \
+    # Enable audio (loads snd_bcm2835) \n \
+    dtparam=audio=on \n \
+'
 
-Run 'bitbake-layers add-layer meta-lms'
+You may build all 3 into one image to run both server and player in one place,
+or just build slimserver to run as server, and build squeezelite with/without
+jivelite to run as player. Add the image(s) to IMAGE_INSTALL and then bitbake.
 
-II. Usage
-========
+How to run
+==========
 
-1) in local.conf or image recipe:
-...
-IMAGE_INSTALL += "slimserver squeezelite"
+All 3 should be started automatically as systemd service after boot.
 
-2) bitbake the image and boot the target, the server and player will auto run.
+For first time use:
+
+- slimserver is delayed until an active network is configured. In my case,
+  wpa_supplicant is used to connect WIFI due to I do not have direct Internet
+  access via Ethernet cable. The reason to add Internet constraints are:
+  1. Login to www.mysqueezebox.com
+  2. Listen to online radio (my new entertainment now. :))
+
+- jivelite needs to select a skin, where "Joggler Skin" fits the official 7"
+  touch display well.
+
+Thanks
+======
+
+This tiny layer started as a personal side project for learning Yocto, special
+thanks to Mark Jonas, who inspired, guided and encouraged me to solve a lot of
+puzzles and thus I'm able to put every pieces together. Thanks, Mark! :)
+
+Issues, Suggestions and Patches
+===============================
+
+Any feedback is sincerely appreciated and welcomed, and I'll try the best to
+fix or implement if time and equipment permits. :)
+
+Please file any issues or suggestions using github.com/zhu-yi/meta-lms/issues,
+or if you prefer, send e-mail to <dev.yi.zhu@gmail.com>.
