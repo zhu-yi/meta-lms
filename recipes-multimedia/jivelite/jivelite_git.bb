@@ -21,6 +21,7 @@ SRCREV = "39db5722a3bc8a9b924d1a8bba39328bf649df66"
 SRC_URI = "git://github.com/ralph-irving/${PN}.git;protocol=git;branch=master \
            file://0001-fix-jivelite-cross-compile-issue.patch;patch=1 \
            file://jivelite.service \
+           file://DroidSansFallback.ttf \
 "
 
 S = "${WORKDIR}/git"
@@ -32,6 +33,9 @@ USERADD_PARAM_${PN} = "--system --home-dir /home/jive --create-home --user-group
 
 EXTRA_OEMAKE = 'PREFIX="${STAGING_EXECPREFIXDIR}"'
 
+# Overwrite it to 1 for using CJK font.
+JIVE_USE_CJK_FONT ?= "0"
+
 do_install() {
     install -d ${D}${bindir}
     install -m 0755 ${B}/bin/${PN} ${D}${bindir}/
@@ -41,6 +45,18 @@ do_install() {
 
     install -d ${D}${datadir}
     cp -r ${B}/share/* ${D}${datadir}/
+
+    if [ "${JIVE_USE_CJK_FONT}" = "1" ]; then
+        # Use Andriod font to replace default font used by jivelite, which is
+        # capable of display Chinese, Japanese and Korean characters correctly.
+        # (http://wiki.slimdevices.com/index.php/Adding_Chinese,_Japanese,_Korean,_etc._Fonts_to_Your_Controller)
+        mv ${D}${datadir}/jive/fonts/FreeSans.ttf ${D}${datadir}/jive/fonts/FreeSans.ttf.origin
+        mv ${D}${datadir}/jive/fonts/FreeSansBold.ttf ${D}${datadir}/jive/fonts/FreeSansBold.ttf.origin
+        cp ${WORKDIR}/DroidSansFallback.ttf ${D}${datadir}/jive/fonts/
+        cd ${D}${datadir}/jive/fonts/
+        ln -s ./DroidSansFallback.ttf FreeSans.ttf
+        ln -s ./DroidSansFallback.ttf FreeSansBold.ttf
+    fi
 
     install -d ${D}${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/${PN}.service ${D}${systemd_system_unitdir}/${PN}.service
